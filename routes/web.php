@@ -9,7 +9,8 @@ use App\Http\Controllers\User\BorrowingController as UserBorrowingController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return view('welcome');
+    $books = \App\Models\Book::latest()->take(4)->get();
+    return view('welcome', compact('books'));
 });
 
 Route::middleware(['auth', 'verified'])->group(function () {
@@ -38,6 +39,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     // User Routes
     Route::get('/books', [UserBookController::class, 'index'])->name('books.index');
+    Route::get('/books/{book}', [UserBookController::class, 'show'])->name('books.show');
     Route::post('/borrow', [TransactionController::class, 'borrow'])->name('borrow.store');
     Route::get('/my-borrowings', [UserBorrowingController::class, 'index'])->name('borrowings.index');
     

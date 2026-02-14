@@ -1,107 +1,110 @@
 <x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Menfess Space') }}
-        </h2>
-    </x-slot>
+    <div class="space-y-8" data-animate="fade-in-up">
+        
+        <!-- Header -->
+        <div class="text-center max-w-2xl mx-auto">
+            <h2 class="text-3xl font-bold text-gray-900 tracking-tight mb-2">Menfess Space</h2>
+            <p class="text-gray-500">Kirim pesan rahasia atau rekomendasi buku secara anonim.</p>
+        </div>
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            
-            @if(session('success'))
-                <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4" role="alert">
-                    <span class="block sm:inline">{{ session('success') }}</span>
-                </div>
-            @endif
-
-            <!-- Submit Form -->
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg mb-6">
-                <div class="p-6 text-gray-900">
-                    <h3 class="text-lg font-medium mb-4">Kirim Menfess</h3>
-                    <form action="{{ route('menfess.store') }}" method="POST">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- Form Section -->
+            <div class="lg:col-span-1">
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 sticky top-24">
+                    <h3 class="font-bold text-lg text-gray-900 mb-4 flex items-center gap-2">
+                        <span class="p-2 bg-pink-50 text-pink-600 rounded-lg">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                        </span>
+                        Kirim Menfess
+                    </h3>
+                    
+                    <form action="{{ route('menfess.store') }}" method="POST" class="space-y-4">
                         @csrf
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                        
+                        <div class="grid grid-cols-2 gap-4">
                             <div>
-                                <label for="sender" class="block text-sm font-medium text-gray-700">Dari (Nama Samaran / Opsional)</label>
-                                <input type="text" id="sender" name="sender" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500" placeholder="Anonymous">
+                                <label class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-1">Dari</label>
+                                <input type="text" name="sender" class="w-full rounded-xl border-gray-200 bg-gray-50 focus:border-pink-500 focus:ring-pink-500/20 text-sm" placeholder="Anonim (Opsional)">
                             </div>
                             <div>
-                                <label for="receiver" class="block text-sm font-medium text-gray-700">Untuk (Mention) <span class="text-red-500">*</span></label>
-                                <input type="text" id="receiver" name="receiver" required class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500" placeholder="Siapa yang mau di-mention?">
+                                <label class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-1">Untuk</label>
+                                <input type="text" name="receiver" class="w-full rounded-xl border-gray-200 bg-gray-50 focus:border-pink-500 focus:ring-pink-500/20 text-sm" required placeholder="Nama/Inisial">
                             </div>
                         </div>
 
-                        <div class="mb-4">
-                            <label for="message" class="block text-sm font-medium text-gray-700">Pesan</label>
-                            <textarea id="message" name="message" rows="3" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500" required placeholder="Tulis pesanmu di sini..."></textarea>
+                        <div>
+                            <label class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-1">Pesan</label>
+                            <textarea name="message" rows="4" class="w-full rounded-xl border-gray-200 bg-gray-50 focus:border-pink-500 focus:ring-pink-500/20 text-sm" required placeholder="Tulis pesanmu di sini..."></textarea>
                         </div>
-                        <div class="mb-4">
-                            <label for="book_id" class="block text-sm font-medium text-gray-700">Rujukan Buku (Opsional)</label>
-                            <select id="book_id" name="book_id" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+
+                        <div>
+                            <label class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-1">Rujuk Buku (Opsional)</label>
+                            <select name="book_id" class="w-full rounded-xl border-gray-200 bg-gray-50 focus:border-pink-500 focus:ring-pink-500/20 text-sm">
                                 <option value="">-- Pilih Buku --</option>
-                                @foreach($books as $book)
-                                    <option value="{{ $book->id }}">{{ $book->judul }} - {{ $book->penulis }}</option>
+                                @foreach(\App\Models\Book::all() as $book)
+                                    <option value="{{ $book->id }}">{{ $book->judul }}</option>
                                 @endforeach
                             </select>
                         </div>
-                        <button type="submit" class="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700">Kirim</button>
+
+                        <button type="submit" class="w-full bg-gray-900 text-white font-bold py-3 rounded-xl hover:bg-black transition shadow-lg flex items-center justify-center gap-2">
+                            <span>Kirim Menfess</span>
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path></svg>
+                        </button>
                     </form>
                 </div>
             </div>
 
-            <!-- Feed -->
-            <div class="space-y-6">
+            <!-- Feed Section -->
+            <div class="lg:col-span-2 space-y-6" data-animate="stagger-children">
                 @foreach($menfesses as $menfess)
-                    <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                        <div class="p-6">
-                            <div class="flex justify-between items-start">
-                                <div>
-                                    <h4 class="font-bold text-lg text-indigo-700">
-                                        {{ $menfess->sender }} <span class="text-gray-400 text-sm font-normal">to</span> {{ $menfess->receiver }}
-                                    </h4>
-                                    <span class="text-gray-500 text-xs">{{ $menfess->created_at->diffForHumans() }}</span>
+                    <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
+                        <div class="flex items-start justify-between mb-4">
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 rounded-full bg-gradient-to-br from-pink-100 to-purple-100 flex items-center justify-center text-pink-500 font-bold">
+                                    ?
                                 </div>
-                                <!-- Report Form -->
-                                <div x-data="{ open: false }">
-                                    <button @click="open = !open" class="text-gray-400 hover:text-red-500 text-sm">
-                                        Report
-                                    </button>
-                                    <div x-show="open" class="absolute bg-white border shadow-lg p-4 rounded mt-2 right-10 z-10 w-64">
-                                        <form action="{{ route('menfess.report', $menfess) }}" method="POST">
-                                            @csrf
-                                            <input type="text" name="reason" placeholder="Alasan lapor..." class="w-full text-sm border-gray-300 rounded mb-2" required>
-                                            <div class="flex justify-end gap-2">
-                                                <button type="button" @click="open = false" class="text-xs text-gray-500">Batal</button>
-                                                <button type="submit" class="text-xs bg-red-500 text-white px-2 py-1 rounded">Kirim</button>
-                                            </div>
-                                        </form>
-                                    </div>
+                                <div>
+                                    <h4 class="font-bold text-gray-900 text-sm">
+                                        <span class="text-pink-600">{{ $menfess->sender ?? 'Anonim' }}</span> 
+                                        <span class="text-gray-400 mx-1">to</span> 
+                                        <span class="text-indigo-600">{{ $menfess->receiver }}</span>
+                                    </h4>
+                                    <p class="text-xs text-gray-400">{{ $menfess->created_at->diffForHumans() }}</p>
                                 </div>
                             </div>
                             
-                            <p class="mt-4 text-gray-800 text-lg">{{ $menfess->message }}</p>
-
-                            @if($menfess->book)
-                                <div class="mt-4 bg-gray-50 p-4 rounded-lg flex items-center border border-gray-200">
-                                    @if($menfess->book->cover_image)
-                                        <img src="{{ asset('storage/' . $menfess->book->cover_image) }}" alt="Cover" class="w-12 h-16 object-cover rounded mr-4">
-                                    @else
-                                        <div class="w-12 h-16 bg-gray-200 rounded mr-4 flex items-center justify-center text-gray-400">
-                                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
-                                        </div>
-                                    @endif
-                                    <div>
-                                        <h4 class="font-semibold text-gray-900">{{ $menfess->book->judul }}</h4>
-                                        <p class="text-sm text-gray-600">{{ $menfess->book->penulis }}</p>
-                                    </div>
-                                </div>
-                            @endif
+                             <!-- Report Button -->
+                            <form action="{{ route('menfess.report', $menfess) }}" method="POST">
+                                @csrf
+                                <button type="submit" class="text-gray-300 hover:text-red-500 transition-colors" title="Laporkan">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                                </button>
+                            </form>
                         </div>
+                        
+                        <p class="text-gray-700 leading-relaxed mb-4 text-sm md:text-base">
+                            "{{ $menfess->message }}"
+                        </p>
+
+                        @if($menfess->book)
+                            <div class="bg-gray-50 rounded-xl p-3 flex items-center gap-3 border border-gray-100">
+                                @if($menfess->book->cover_image)
+                                    <img src="{{ asset('storage/' . $menfess->book->cover_image) }}" class="w-10 h-14 object-cover rounded-md shadow-sm">
+                                @else
+                                    <div class="w-10 h-14 bg-gray-200 rounded-md flex items-center justify-center text-gray-400">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+                                    </div>
+                                @endif
+                                <div>
+                                    <p class="text-xs font-bold text-gray-500 uppercase tracking-wider">Merekomendasikan</p>
+                                    <a href="{{ route('books.show', $menfess->book) }}" class="font-bold text-gray-900 hover:text-green-600 transition-colors">{{ $menfess->book->judul }}</a>
+                                </div>
+                            </div>
+                        @endif
                     </div>
                 @endforeach
-            </div>
-            
-            <div class="mt-6">
+
                 {{ $menfesses->links() }}
             </div>
         </div>

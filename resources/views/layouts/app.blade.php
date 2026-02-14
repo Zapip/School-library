@@ -11,34 +11,20 @@
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;500;700&display=swap" rel="stylesheet">
-
+        
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
-        
-        <style>
-            .glass-panel {
-                background: rgba(255, 255, 255, 0.7);
-                backdrop-filter: blur(12px);
-                border: 1px solid rgba(255, 255, 255, 0.3);
-            }
-            .glass-sidebar {
-                background: rgba(255, 255, 255, 0.85);
-                backdrop-filter: blur(16px);
-                border-right: 1px solid rgba(255, 255, 255, 0.4);
-            }
-        </style>
     </head>
-    <body class="font-['DM_Sans'] antialiased text-gray-800 bg-cover bg-center bg-fixed" style="background-image: url('https://images.unsplash.com/photo-1541963463532-d68292c34b19?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80');">
-        
+    <body class="font-['DM_Sans'] antialiased text-gray-800 bg-slate-50 relative">
         <div class="flex h-screen overflow-hidden">
             
             <!-- Sidebar -->
-            <aside class="w-72 flex-shrink-0 hidden md:flex flex-col glass-sidebar shadow-2xl z-30 transition-all duration-300">
-                <div class="p-8 flex items-center justify-center flex-col border-b border-gray-100/50">
-                    <div class="p-2 bg-white rounded-2xl shadow-sm mb-4">
-                        <img src="{{ asset('logo.png') }}" alt="Logo" class="h-12 w-auto">
+            <aside class="w-72 flex-shrink-0 hidden md:flex flex-col bg-white border-r border-gray-200 z-30 transition-all duration-300">
+                <div class="p-8 flex items-center justify-center flex-col border-b border-gray-100">
+                    <div class="p-2 mb-4 bg-gray-50 rounded-xl">
+                        <img src="{{ asset('logo.png') }}" alt="Logo" class="h-10 w-auto filter grayscale opacity-80 hover:grayscale-0 hover:opacity-100 transition-all duration-500">
                     </div>
-                    <h1 class="text-base font-bold text-gray-900 text-center tracking-tight leading-tight">PERPUSTAKAAN<br><span class="text-green-700">SMKN 2 MAGELANG</span></h1>
+                    <h1 class="text-sm font-bold text-gray-900 text-center tracking-tight leading-tight uppercase font-['Inter']">Perpustakaan<br><span class="text-gray-500 font-normal text-xs">SMKN 2 Magelang</span></h1>
                 </div>
 
                 <nav class="flex-1 overflow-y-auto py-6 space-y-1 px-4">
@@ -78,42 +64,39 @@
                     @endif
                 </nav>
 
-                <div class="p-6 border-t border-gray-100/50 bg-white/40">
+                <div class="p-6 border-t border-gray-100 bg-gray-50/50">
                     <div class="flex items-center gap-3">
-                        <img src="https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name) }}&background=10B981&color=fff" alt="Avatar" class="w-10 h-10 rounded-full shadow-sm">
+                        <img src="https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name) }}&background=1f2937&color=fff" alt="Avatar" class="w-10 h-10 rounded-full border border-gray-200">
                         <div class="flex-1 min-w-0">
                             <p class="text-sm font-bold text-gray-900 truncate">
                                 {{ Auth::user()->name }}
                             </p>
-                            <p class="text-xs text-gray-500 truncate">
-                                {{ Auth::user()->role === 'admin' ? 'Administrator' : 'Access Granted' }}
-                            </p>
+                            <form method="POST" action="{{ route('logout') }}">
+                                @csrf
+                                <button type="submit" class="text-xs text-red-500 hover:text-red-700 font-medium truncate w-full text-left">
+                                    Logout
+                                </button>
+                            </form>
                         </div>
                     </div>
                 </div>
             </aside>
 
             <!-- Main Content -->
-            <div class="flex-1 flex flex-col h-screen overflow-hidden relative">
+            <div class="flex-1 flex flex-col h-screen overflow-hidden relative bg-slate-50">
                 <!-- Mobile Header -->
-                <header class="md:hidden glass-panel border-b border-white/30 p-4 flex justify-between items-center z-20 mx-4 mt-4 rounded-2xl shadow-lg">
+                <header class="md:hidden bg-white border-b border-gray-200 p-4 flex justify-between items-center z-20">
                     <div class="flex items-center gap-2">
-                        <img src="{{ asset('logo.png') }}" alt="Logo" class="h-8 w-auto">
-                        <span class="font-bold text-gray-800 text-sm">SMKN 2 MGL</span>
+                        <img src="{{ asset('logo.png') }}" alt="Logo" class="h-8 w-auto grayscale">
+                        <span class="font-bold text-gray-800 text-sm uppercase">SMKN 2 MGL</span>
                     </div>
-                    <button @click="sidebarOpen = !sidebarOpen" class="text-gray-700 bg-white/50 p-2 rounded-lg hover:bg-white/80 transition shadow-sm">
+                    <button @click="sidebarOpen = !sidebarOpen" class="text-gray-700 p-2 rounded-lg hover:bg-gray-100 transition">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
                     </button>
-                    <!-- Mobile Menu Dropdown could go here, simplified for now -->
                 </header>
 
                 <!-- Page Content -->
-                <main class="flex-1 overflow-x-hidden overflow-y-auto w-full p-4 md:p-8 scroll-smooth">
-                    @if (isset($header))
-                        {{-- Header removed to fit the "Hero" style more naturally, 
-                             or we can keep it as a breadcrumb/title --}}
-                    @endif
-
+                <main class="flex-1 overflow-x-hidden overflow-y-auto w-full p-4 md:p-10 scroll-smooth">
                     {{ $slot }}
                 </main>
             </div>

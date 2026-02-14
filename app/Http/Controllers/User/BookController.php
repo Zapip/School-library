@@ -18,4 +18,9 @@ class BookController extends Controller
         $books = $this->bookService->getAllBooks($search);
         return view('user.books.index', compact('books', 'search'));
     }
+
+    public function show(\App\Models\Book $book)
+    {
+        return view('user.books.show', compact('book'));
+    }
 }
